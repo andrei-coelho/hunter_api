@@ -8,6 +8,7 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
 START TRANSACTION;
 
+
 DROP TABLE IF EXISTS `cliente`;
 CREATE TABLE `cliente` (
   `id` bigint(255) NOT NULL,
@@ -108,10 +109,12 @@ CREATE TABLE `usuario` (
 
 
 ALTER TABLE `cliente`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `machine_id_estrangeira` (`machine`);
 
 ALTER TABLE `conta_rede_social`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `cliente_id_estrangeira` (`id_cliente`);
 
 ALTER TABLE `label_text`
   ADD PRIMARY KEY (`id`);
@@ -120,19 +123,25 @@ ALTER TABLE `machine`
   ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `mensagem`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `cliente_id_estrangeira_msg` (`id_cliente`);
 
 ALTER TABLE `mensagem_enviada`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `cliente_id_estrangeira_enviado` (`id_cliente`),
+  ADD KEY `perfil_id_estrangeiro` (`id_perfil`);
 
 ALTER TABLE `perfil`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `cliente_id_estrangeira_perfil` (`id_cliente`);
 
 ALTER TABLE `tag`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `cliente_id_estrangeira_tag` (`id_cliente`);
 
 ALTER TABLE `usuario`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `cliente_id_estrangeira_usuario` (`id_cliente`);
 
 
 ALTER TABLE `cliente`
@@ -161,4 +170,27 @@ ALTER TABLE `tag`
 
 ALTER TABLE `usuario`
   MODIFY `id` bigint(255) NOT NULL AUTO_INCREMENT;
+
+
+ALTER TABLE `cliente`
+  ADD CONSTRAINT `machine_id_estrangeira` FOREIGN KEY (`machine`) REFERENCES `machine` (`id`);
+
+ALTER TABLE `conta_rede_social`
+  ADD CONSTRAINT `cliente_id_estrangeira` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`id`);
+
+ALTER TABLE `mensagem`
+  ADD CONSTRAINT `cliente_id_estrangeira_msg` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`id`);
+
+ALTER TABLE `mensagem_enviada`
+  ADD CONSTRAINT `cliente_id_estrangeira_enviado` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`id`),
+  ADD CONSTRAINT `perfil_id_estrangeiro` FOREIGN KEY (`id_perfil`) REFERENCES `perfil` (`id`);
+
+ALTER TABLE `perfil`
+  ADD CONSTRAINT `cliente_id_estrangeira_perfil` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`id`);
+
+ALTER TABLE `tag`
+  ADD CONSTRAINT `cliente_id_estrangeira_tag` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`id`);
+
+ALTER TABLE `usuario`
+  ADD CONSTRAINT `cliente_id_estrangeira_usuario` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`id`);
 COMMIT;
