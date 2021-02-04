@@ -47,9 +47,5 @@ class Config {
         return self::$instance->data['production'];
     }
 
-    public static function is_pack($pack){
-
-        return in_array($pack, self::$instance->data['pack']);
-    }
 
 }

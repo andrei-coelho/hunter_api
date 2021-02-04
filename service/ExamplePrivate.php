@@ -3,13 +3,9 @@
 namespace service;
 use src\Response as Response;
 
-class Example implements Service {
+class ExamplePrivate extends ModelService {
 
-    private $access = "UserClient";
-
-    public function isValidClient():bool{
-        return true;
-    }
+    protected $access = "UserClient";
 
     public function get():Response {
         return new Response();

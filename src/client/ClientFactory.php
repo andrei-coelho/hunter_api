@@ -4,10 +4,6 @@ namespace src\client;
 
 class ClientFactory {
 
-    private static $clients = [
-        'UserClient', 'MachineClient', 'AdminClient'
-    ];
-
     public static function getClient($slugClient):Client{
         
         foreach($_SERVER as $K => $V){
@@ -16,19 +12,17 @@ class ClientFactory {
         
             if(array_shift($a) == 'HTTP'){
                
-                if(isset($a[1]) && $a[0]."-".$a[1] == 'HUNTER-CHAVE'){
+                if(isset($a[1]) && strtoupper($a[0]."-".$a[1]) == 'HUNTER-CHAVE'){
                     $client = ucfirst(strtolower($a[2]))."Client";
-                    if(in_array($client, self::$clients)){
-                        $client = "src\\client\\".$client;
-                        return new $client($slugClient);
-                    }
+                    $client = "src\\client\\".$client;
+                    return new $client($slugClient, $V);
                 }
                 
             }
         
         }
 
-        return new DefaultClient();
+        return new DefaultClient($slugClient);
 
     }
 

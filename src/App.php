@@ -25,16 +25,43 @@ class App {
             Response::error();
         }
         
-        $slugCli = trim($req[2]) ?? false;
+        $slugCli = isset($req[2]) ? trim($req[2]) : "";
+
+        sqli\DataBase::open_links();
 
         try {
-        
             $client = client\ClientFactory::getClient($slugCli);
-
         } catch (\Exception $e) {
-            Response::error();
+            Response::error(403);
+        }
+
+        $serviceComplete = "service\\".$service;
+        
+        try {
+            $serviceObj = new $serviceComplete($client);
+        } catch (\Exception $e) {
+            Response::error(404, "Serviço '$service' não existe");
+        }
+
+        self::runServiceAndResponse($serviceObj, $method);
+        
+    }
+
+
+    private static function runServiceAndResponse(\service\Service $service, $method){
+        
+        if(!$service->isValidClient()){
+            Response::error(403);
+        }
+
+        if(!method_exists($service, $method)){
+            Response::error(404, "Método '$method' não existe");
         }
         
+        $service->$method();
+        $response = $service->getResponse();
+        sqli\DataBase::close_all();
+        $response->commit();
 
     }
 

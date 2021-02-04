@@ -2,25 +2,32 @@
 
 namespace service;
 
-use src\Client as Client;
+use src\client\Client as Client;
 use src\Response as Response;
 
 abstract class Service {
 
     protected $access = "ALL";
     protected $client;
+    protected $response;
 
     public function __construct(Client $client){
         $this->client = $client;
-        if(!$this->isValidClient())
-            throw new Exception("Erro. Este cliente não é válido!", 1);
     }
 
-    abstract function isValidClient():bool;
+    public function isValidClient():bool{
 
-    abstract function get():Response;
-    abstract function create():Response;
-    abstract function update():Response;
-    abstract function delete():Response;
+        $expl = explode("\\", get_class($this->client));
+        $nameType = array_pop($expl);
+        return $this->access == "ALL" || $nameType == $this->access;
+
+    }
+
+    public function getResponse():Response {
+        if($this->response && $this->response instanceof Response){
+            return $this->response;
+        }
+        return new Response;
+    }
 
 }

@@ -22,7 +22,7 @@ URL
 
 ***POST***
 
-Qualquer requisição com necessita de envio variáveis devem ser realizadas via metodo POST
+Qualquer requisição com envio variáveis devem ser realizadas via metodo POST
 
 ## ****Em javascript****
 
@@ -72,7 +72,7 @@ A API funciona como uma espécie de ORM. Todos os dados que a aplicação precis
 *Exemplo em PHP:*
 
 ```php
-define('URL', 'http://api.com.br/user/get/my_slug');
+define('URL', 'http://api.com.br/user/get/client_slug');
 $vars = [
     'where' => [
         'id', '=', 1
@@ -85,7 +85,7 @@ curl_setopt($ch, CURLOPT_POSTFIELDS, $vars);
 *Exemplo em JS:*
 
 ```javascript
-const URL = 'http://api.com.br/user/get/my_slug';
+const URL = 'http://api.com.br/user/get/client_slug';
 let vars = {
     where:[
         'id', '=', 1
