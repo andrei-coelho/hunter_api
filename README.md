@@ -4,6 +4,10 @@
 
 REST API do Hunter
 
+***Fluxograma***
+
+![Fluxograma](FluxogramaAPIHunter.png)
+
 # Uso
 
 ***REQUEST***
@@ -14,7 +18,7 @@ HEADER
 
 URL
 
-```{url_base}/{slug}/{object}/{function}```
+```{url_base}/{object}/{function}/{client.slug}```
 
 ***POST***
 
@@ -68,7 +72,7 @@ A API funciona como uma espécie de ORM. Todos os dados que a aplicação precis
 *Exemplo em PHP:*
 
 ```php
-define('URL', 'http://api.com.br/my_key/user/get');
+define('URL', 'http://api.com.br/user/get/my_slug');
 $vars = [
     'where' => [
         'id', '=', 1
@@ -81,7 +85,7 @@ curl_setopt($ch, CURLOPT_POSTFIELDS, $vars);
 *Exemplo em JS:*
 
 ```javascript
-const URL = 'http://api.com.br/my_key/user/get';
+const URL = 'http://api.com.br/user/get/my_slug';
 let vars = {
     where:[
         'id', '=', 1
