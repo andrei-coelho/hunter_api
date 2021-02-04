@@ -5,7 +5,7 @@ use src\Response as Response;
 
 class Example implements Service {
 
-    private $access = "USER";
+    private $access = "UserClient";
 
     public function isValidClient():bool{
         return true;

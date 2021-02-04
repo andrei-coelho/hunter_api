@@ -31,7 +31,7 @@ class App {
         
             $client = client\ClientFactory::getClient($slugCli);
 
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
             Response::error();
         }
         

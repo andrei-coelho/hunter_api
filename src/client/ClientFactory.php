@@ -16,9 +16,10 @@ class ClientFactory {
         
             if(array_shift($a) == 'HTTP'){
                
-                if(isset($a[1]) && $a[0]."-".$a[1] == 'CHAVE-HUNTER'){
-                    $client = ucfirst(strtolower($a[1]))."Client";
+                if(isset($a[1]) && $a[0]."-".$a[1] == 'HUNTER-CHAVE'){
+                    $client = ucfirst(strtolower($a[2]))."Client";
                     if(in_array($client, self::$clients)){
+                        $client = "src\\client\\".$client;
                         return new $client($slugClient);
                     }
                 }

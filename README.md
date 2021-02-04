@@ -33,7 +33,7 @@ Com uso da biblioteca [axios](https://www.npmjs.com/package/axios)
 ```javascript
 axios.post(URL, vars, {
     headers: {
-        'X-KEY-MACHINE': machine
+        'HUNTER-CHAVE-MACHINE': machine
     }
 })
 .then((response) => {
@@ -58,7 +58,7 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt( 
     $ch, 
     CURLOPT_HTTPHEADER,
-    ['X-KEY-MACHINE:'.$machine]
+    ['HUNTER-CHAVE-MACHINE:'.$machine]
 );
 
 $response = curl_exec($ch);
