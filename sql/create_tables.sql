@@ -9,6 +9,9 @@ SET AUTOCOMMIT = 0;
 START TRANSACTION;
 
 
+
+-- Estrutura das tabelas
+
 DROP TABLE IF EXISTS `cliente`;
 CREATE TABLE `cliente` (
   `id` bigint(255) NOT NULL,
@@ -104,9 +107,22 @@ CREATE TABLE `usuario` (
   `id_cliente` bigint(255) NOT NULL,
   `nome` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
-  `senha` varchar(255) NOT NULL
+  `senha` varchar(255) NOT NULL,
+  `chave` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+DROP TABLE IF EXISTS `admin`;
+CREATE TABLE `admin` (
+  `id` bigint(255) NOT NULL,
+  `nome` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `senha` varchar(255) NOT NULL,
+  `chave` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+
+-- insere chave primária nos ids das tabelas
 
 ALTER TABLE `cliente`
   ADD PRIMARY KEY (`id`),
@@ -143,6 +159,17 @@ ALTER TABLE `usuario`
   ADD PRIMARY KEY (`id`),
   ADD KEY `cliente_id_estrangeira_usuario` (`id_cliente`);
 
+ALTER TABLE `admin`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `chave` (`chave`);
+
+
+
+-- insere 'Auto increment' nos ids das tabelas
+
+ALTER TABLE `admin`
+  MODIFY `id` bigint(255) NOT NULL AUTO_INCREMENT;
+COMMIT;
 
 ALTER TABLE `cliente`
   MODIFY `id` bigint(255) NOT NULL AUTO_INCREMENT;
@@ -171,6 +198,9 @@ ALTER TABLE `tag`
 ALTER TABLE `usuario`
   MODIFY `id` bigint(255) NOT NULL AUTO_INCREMENT;
 
+
+
+-- insere chave estrangeira
 
 ALTER TABLE `cliente`
   ADD CONSTRAINT `machine_id_estrangeira` FOREIGN KEY (`machine`) REFERENCES `machine` (`id`);

@@ -13,7 +13,6 @@ class ExamplePrivate extends ModelService {
     }
 
     public function create():Response {
-        var_dump(vars::get());
         return new Response();
     }
 
