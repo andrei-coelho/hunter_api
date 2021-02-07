@@ -2,16 +2,18 @@
 
 namespace service;
 use src\Response as Response;
+use src\Vars as vars;
 
 class ExamplePrivate extends ModelService {
 
-    protected $access = "UserClient";
+    protected $access = ["MachineClient", "UserClient", "AdminClient"];
 
     public function get():Response {
         return new Response();
     }
 
     public function create():Response {
+        var_dump(vars::get());
         return new Response();
     }
 

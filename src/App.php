@@ -1,7 +1,5 @@
 <?php 
 
-// {object}/{function}/{client.slug}
-
 namespace src;
 
 class App {
@@ -28,17 +26,17 @@ class App {
         $slugCli = isset($req[2]) ? trim($req[2]) : "";
 
         sqli\DataBase::open_links();
-
+        
         try {
             $client = client\ClientFactory::getClient($slugCli);
         } catch (\Exception $e) {
-            Response::error(403);
+            Response::error(403, "Você não é um cliente autorizado");
         }
 
         $serviceComplete = "service\\".$service;
         
         try {
-            $serviceObj = new $serviceComplete($client);
+            $serviceObj = new $serviceComplete($client, $slugCli);
         } catch (\Exception $e) {
             Response::error(404, "Serviço '$service' não existe");
         }
@@ -51,7 +49,7 @@ class App {
     private static function runServiceAndResponse(\service\Service $service, $method){
         
         if(!$service->isValidClient()){
-            Response::error(403);
+            Response::error(403, "Você não tem autorização para acessar este serviço");
         }
 
         if(!method_exists($service, $method)){

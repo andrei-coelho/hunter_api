@@ -8,9 +8,14 @@ class UserClient implements Client {
 
     public function __construct($slugClient, $chave = ""){
 
-        // fazer um join e validar com a slug do cliente
-        $res = sqli::query("SELECT * FROM usuario WHERE chave = '$chave'");
-        if($res->rowCount() == 0){
+        $res = sqli::query("SELECT usuario.id
+            FROM usuario 
+            JOIN cliente ON cliente.id = usuario.id_cliente
+            WHERE usuario.chave = '$chave' 
+            AND cliente.slug = '$slugClient' 
+        ");
+
+        if(!$res || $res->rowCount() == 0){
             throw new Exception("", 1);
         }
         
