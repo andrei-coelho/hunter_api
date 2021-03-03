@@ -14,17 +14,23 @@ class Response {
             "data"   => $arr,
             "status" => $status
         ];
+    
     }
  
     public static function error(int $num = 404, $message = null){
 
-        header("HTTP/1.0 $num");
-
         $response = new Response(["message" => ($message ?? "Erro $num")], $num, Response::ERROR);
-        $response->commit();
+        $response->commit($num);
+
     }
 
-    public function commit(){
+    public function commit($status = "200 OK"){
+        
+        if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+            http_response_code(200);
+        }
+        
+        header("HTTP/1.1 $status");
 
         echo json_encode($this->response, 
             JSON_PRESERVE_ZERO_FRACTION | 

@@ -4,24 +4,24 @@ namespace service;
 use src\Response as Response;
 use src\Vars as vars;
 
-class ExamplePrivate extends ModelService {
+class ExamplePrivate extends Service {
 
     protected $access = ["MachineClient", "UserClient", "AdminClient"];
 
-    public function get():Response {
-        return new Response();
+    public function get() {
+        $this->response = new Response(vars::get());
     }
 
-    public function create():Response {
-        return new Response();
+    public function create() {
+        $this->response = new Response();
     }
 
-    public function update():Response {
-        return new Response();
+    public function update() {
+        $this->response = new Response();
     }
 
-    public function delete():Response {
-        return new Response();
+    public function delete() {
+        $this->response = new Response();
     }
 
 }

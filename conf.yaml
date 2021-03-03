@@ -1,8 +1,6 @@
 # %YAML 1.2
 ---
   
-production_url:  http://localhost/hunter_api/
-development_url: 
 production:      false
 
 # banco de dados

@@ -43,6 +43,27 @@ axios.post(URL, vars, {
     // .. TODO ..
 })
 ```
+Enviando dados usando ```fetch()``` com método POST
+
+```javascript
+  const vars = {
+    "ola":"mundo"
+  }
+
+  var headers = new Headers({
+    'HUNTER-CHAVE-MACHINE': 'machine_key'
+  });
+
+  var myInit = { 
+    method: 'POST',
+    headers: headers,
+    body:JSON.stringify(vars)
+  };
+
+  fetch('https://myapi.com/examplePrivate/get/CLIENT_SLUG', myInit)
+  .then(response => response.json())
+  .then( obj => console.log(obj))
+```
 
 ## ****Em PHP****
 Com uso da biblioteca cURL

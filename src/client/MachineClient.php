@@ -7,7 +7,7 @@ use src\sqli\SQLi as sqli;
 class MachineClient implements Client {
 
     public function __construct($slugClient, $chave = "") {
-        
+
         $res = sqli::query("SELECT machine.id
             FROM machine 
             JOIN cliente ON machine.id = cliente.machine

@@ -16,7 +16,7 @@ class UserClient implements Client {
         ");
 
         if(!$res || $res->rowCount() == 0){
-            throw new Exception("", 1);
+            throw new \Exception("", 1);
         }
         
     }

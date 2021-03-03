@@ -26,10 +26,10 @@ abstract class Service {
     }
 
     public function getResponse():Response {
-        if($this->response && $this->response instanceof Response){
-            return $this->response;
-        }
+
+        if($this->response && $this->response instanceof Response) return $this->response;
         return new Response;
+        
     }
 
 }
