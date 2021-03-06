@@ -4,7 +4,7 @@ namespace src\client;
 
 use src\sqli\SQLi as sqli;
 
-class UserClient implements Client {
+class UserClient extends DataClient implements Client {
 
     public function __construct($slugClient, $chave = ""){
 
@@ -15,10 +15,12 @@ class UserClient implements Client {
             AND cliente.slug = '$slugClient' 
         ");
 
-        if(!$res || $res->rowCount() == 0){
+        if(!$res || $res->rowCount() != 1){
             throw new \Exception("", 1);
         }
         
+        $this->dataClient = $res->fetchAssoc();
+
     }
 
 }

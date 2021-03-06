@@ -10,10 +10,11 @@ class Config {
     private function __construct(){
 
         $this->data = Spyc::YAMLLoad('../conf.yaml');
-
+        /*
         $this->url  = $this->data['production'] 
                     ? $this->data['production_url']
                     : $this->data['development_url'];
+                    */
 
     }
 

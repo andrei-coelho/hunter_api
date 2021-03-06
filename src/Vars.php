@@ -27,7 +27,7 @@ class Vars {
         return  $key ? 
                 isset($posts[$key]) ? 
                 $posts[$key] : 
-                [] : 
+                false : 
                 $posts;
     }
 
