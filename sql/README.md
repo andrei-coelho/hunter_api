@@ -1,3 +1,3 @@
 # Modelo em UML
 
-![diagrama](UML_ER.png)
+![diagrama](diagrama_hunter_er.png)
