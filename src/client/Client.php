@@ -4,6 +4,6 @@ namespace src\client;
 
 interface Client {
 
-    public function __construct($slugClient, $chave = "");
+    public function __construct($chave, $data = []);
 
 }

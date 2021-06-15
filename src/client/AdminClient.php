@@ -6,7 +6,7 @@ use src\sqli\SQLi as sqli;
 
 class AdminClient implements Client {
 
-    public function __construct($slugClient, $chave = "") {
+    public function __construct($chave, $data = []) {
         
         $res = sqli::query("SELECT admin.id
             FROM admin 

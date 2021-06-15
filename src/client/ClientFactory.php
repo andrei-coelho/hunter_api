@@ -2,27 +2,31 @@
 
 namespace src\client;
 
+use src\Vars as vars;
+
 class ClientFactory {
 
-    public static function getClient($slugClient):Client{
+    public static function getClient():Client{
         
-        foreach($_SERVER as $K => $V){
+        $clie = false;
+        $vars = vars::get();
         
-            $a = explode('_' , $K);
+        foreach($vars as $K => $V){
+        
+            $a = explode('-' , $K);
             
-            if(array_shift($a) == 'HTTP'){
-
-                if(isset($a[1]) && strtoupper($a[0]."-".$a[1]) == 'HUNTER-CHAVE'){
-                    $client = ucfirst(strtolower($a[2]))."Client";
-                    $client = "src\\client\\".$client;
-                    return new $client($slugClient, $V);
-                }
-                
+            if(isset($a[1]) && strtoupper($a[0]."-".$a[1]) == 'HUNTER-CHAVE'){
+                $client = ucfirst(strtolower($a[2]))."Client";
+                $client = "src\\client\\".$client;
+                $clie   = new $client($V);
+                continue;
             }
         
         }
+        
+        if($clie) return $clie;
 
-        return new DefaultClient($slugClient);
+        return new DefaultClient("default_key_gen_temp_".md5(mt_rand(0,100000).date('dmYhis')));
 
     }
 

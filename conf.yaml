@@ -9,7 +9,7 @@ database:
   default:
     driver: mysql
     host: localhost
-    dbname: hunter2
+    dbname: hunter_db
     user: root
     pass:
     charset: utf8

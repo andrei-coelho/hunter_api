@@ -5,7 +5,7 @@ namespace src;
 class Vars {
 
     private static $instance; 
-    private $posts;
+    private $posts = [];
 
     private function __construct(){
 
@@ -14,8 +14,7 @@ class Vars {
         
         foreach ($_POST as $key => $value)
             $this->posts[$key] = $value;
-        
-        // var_dump($_POST);
+
     }
 
     public static function get($key = false){

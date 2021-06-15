@@ -14,7 +14,11 @@ class App {
 
         if(!isset($_GET['req'])) Response::error();
         $req = explode('/', $_GET['req']);
-        
+
+        if(count($req) < 2){
+            Response::error(404, "A requisição não é válida");
+        }
+
         if(!($service = ucfirst(trim($req[0])) ?? false)){
             Response::error();
         }

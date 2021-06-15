@@ -2,7 +2,7 @@
 * Versão do MySQL: 5.7+
 */
 
-use hunter2;
+use hunter_db;
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -55,12 +55,14 @@ CREATE TABLE `config_rede_social` (
   `q_max_actions` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+
 CREATE TABLE `contas_rede_social` (
   `id` bigint(255) NOT NULL,
   `perfil_cliente_id` bigint(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `senha` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 CREATE TABLE `machine` (
   `id` bigint(255) NOT NULL,
@@ -100,7 +102,6 @@ CREATE TABLE `perfis_cliente` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
-
 CREATE TABLE `perfis_to_action` (
   `id` bigint(255) NOT NULL,
   `perfil_cliente_id` bigint(255) NOT NULL,
@@ -109,14 +110,12 @@ CREATE TABLE `perfis_to_action` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
-
 CREATE TABLE `rede_social` (
   `id` bigint(255) NOT NULL,
   `nome` varchar(255) NOT NULL,
   `site` varchar(255) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
 
 
 CREATE TABLE `sessions` (
@@ -135,13 +134,11 @@ CREATE TABLE `sessions_admin` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
-
 CREATE TABLE `sessions_usuario` (
   `id` bigint(255) NOT NULL,
   `usuario_id` bigint(255) NOT NULL,
   `session_id` bigint(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
 
 
 CREATE TABLE `tags` (
@@ -192,6 +189,7 @@ ALTER TABLE `config_rede_social`
 ALTER TABLE `contas_rede_social`
   ADD PRIMARY KEY (`id`),
   ADD KEY `foreign_perfil_cliente_id_contas_rede_social` (`perfil_cliente_id`);
+
 
 ALTER TABLE `machine`
   ADD PRIMARY KEY (`id`);
@@ -270,6 +268,7 @@ ALTER TABLE `clientes`
 ALTER TABLE `config_rede_social`
   MODIFY `id` bigint(255) NOT NULL AUTO_INCREMENT;
 
+
 ALTER TABLE `contas_rede_social`
   MODIFY `id` bigint(255) NOT NULL AUTO_INCREMENT;
 
@@ -326,6 +325,7 @@ ALTER TABLE `actions_cliente`
   ADD CONSTRAINT `foreign_action_id_actions_cliente` FOREIGN KEY (`action_id`) REFERENCES `actions` (`id`),
   ADD CONSTRAINT `foreign_cliente_id_actions_cliente` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`);
 
+
 ALTER TABLE `clientes`
   ADD CONSTRAINT `foreign_machine_id_clientes` FOREIGN KEY (`machine_id`) REFERENCES `machine` (`id`);
 
@@ -372,6 +372,9 @@ ALTER TABLE `sessions_usuario`
 ALTER TABLE `tags`
   ADD CONSTRAINT `foreign_cliente_id_tags` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`);
 
+
 ALTER TABLE `usuarios`
   ADD CONSTRAINT `foreign_cliente_id_usuarios` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`);
+
+  
 COMMIT;
