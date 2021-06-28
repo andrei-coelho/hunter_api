@@ -7,7 +7,6 @@ use src\sqli\SQLi as sqli;
 class MachineClient extends DataClient implements Client {
 
     public function __construct($chave, $data = []) {
-        echo $chave;
         if(($slugClient = isset($data['HUNTER-SLUG-CLIENT']) ? $data['HUNTER-SLUG-CLIENT'] : false)){
             $res = sqli::query("SELECT 
             machine.id as machine_id,

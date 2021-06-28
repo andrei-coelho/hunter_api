@@ -49,10 +49,8 @@ CREATE TABLE `config_rede_social` (
   `id` bigint(255) NOT NULL,
   `rede_social_id` bigint(255) NOT NULL,
   `cliente_id` bigint(255) NOT NULL,
-  `q_desseguir` int(11) NOT NULL,
-  `q_mensagens` int(11) NOT NULL,
-  `q_seguir` int(11) NOT NULL,
-  `q_max_actions` int(11) NOT NULL
+  `action_id` bigint(255) NOT NULL,
+  `quant_max` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
@@ -183,7 +181,8 @@ ALTER TABLE `clientes`
 ALTER TABLE `config_rede_social`
   ADD PRIMARY KEY (`id`),
   ADD KEY `foreign_rede_social_id_config_rede_social` (`rede_social_id`),
-  ADD KEY `foreign_cliente_id_config_rede_social` (`cliente_id`);
+  ADD KEY `foreign_cliente_id_config_rede_social` (`cliente_id`),
+  ADD KEY `foreign_actions_id_config_rede_social` (`action_id`);
 
 
 ALTER TABLE `contas_rede_social`
@@ -331,6 +330,7 @@ ALTER TABLE `clientes`
 
 
 ALTER TABLE `config_rede_social`
+  ADD CONSTRAINT `foreign_actions_id_config_rede_social` FOREIGN KEY (`action_id`) REFERENCES `actions` (`id`),
   ADD CONSTRAINT `foreign_cliente_id_config_rede_social` FOREIGN KEY (`cliente_id`) REFERENCES `clientes` (`id`),
   ADD CONSTRAINT `foreign_rede_social_id_config_rede_social` FOREIGN KEY (`rede_social_id`) REFERENCES `rede_social` (`id`);
 

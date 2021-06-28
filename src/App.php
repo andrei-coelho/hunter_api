@@ -28,7 +28,7 @@ class App {
         }
         
         $slugCli = isset($req[2]) ? trim($req[2]) : "";
-
+        
         sqli\DataBase::open_links();
         
         try {

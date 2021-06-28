@@ -16,17 +16,17 @@ class ClienteService extends Service {
      */
     public function get() {
 
-        $query = "SELECT cliente.* 
-        FROM cliente JOIN machine
-        ON cliente.machine = machine.id ";
+        $query = "SELECT clientes.* 
+        FROM clientes JOIN machine
+        ON clientes.machine_id = machine.id";
 
         $machineData = $this->client->getData();
         $machineId   = (int)$machineData['machine_id'];
         $slug = isset($machineData['slug']) ? $machineData['slug'] : false;
 
         $query .=  $slug ?
-                "WHERE cliente.slug = '$slug' AND machine.id = $machineId" :
-                "WHERE machine.id = $machineId";
+                "WHERE clientes.slug = '$slug' AND machine.id = $machineId AND clientes.status = 1" :
+                "WHERE machine.id = $machineId AND clientes.status = 1";
 
         $res = sqli::query($query);
 
@@ -38,5 +38,6 @@ class ClienteService extends Service {
         Response::error();
 
     }
+
 
 }
