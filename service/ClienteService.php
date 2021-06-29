@@ -25,8 +25,8 @@ class ClienteService extends Service {
         $slug = isset($machineData['slug']) ? $machineData['slug'] : false;
 
         $query .=  $slug ?
-                "WHERE clientes.slug = '$slug' AND machine.id = $machineId AND clientes.status = 1" :
-                "WHERE machine.id = $machineId AND clientes.status = 1";
+                " WHERE clientes.slug = '$slug' AND machine.id = $machineId AND clientes.status = 1" :
+                " WHERE machine.id = $machineId AND clientes.status = 1";
 
         $res = sqli::query($query);
 

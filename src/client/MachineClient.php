@@ -19,7 +19,9 @@ class MachineClient extends DataClient implements Client {
                 AND cliente.slug = '$slugClient' 
             ");
         } else {
-            $res = sqli::query("SELECT machine.id as machine_id
+            $res = sqli::query("SELECT 
+                machine.chave as machine_chave,
+                machine.id as machine_id
                 FROM machine 
                 WHERE machine.chave = '$chave'
             ");
