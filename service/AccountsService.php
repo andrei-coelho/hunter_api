@@ -24,7 +24,9 @@ class AccountsService extends Service {
                 contas_rede_social.email as email,
                 contas_rede_social.senha as senha,
                 perfis.nome as nome,
-                perfis.slug as slug
+                perfis.slug as slug,
+                rede_social.nome as redeSocial,
+                perfis_cliente.id as id
 
              FROM contas_rede_social
              JOIN perfis_cliente ON perfis_cliente.id = contas_rede_social.perfil_cliente_id
@@ -40,8 +42,13 @@ class AccountsService extends Service {
                 AND clientes.slug = '".$vars['clientSlug']."'
             ");
         
-        $this->response = new Response($res -> fetchAllAssoc());
+        if($res){
+            $this->response = new Response($res -> fetchAllAssoc());
+            return;
+        }
 
+        Response::error();
+        
     }
 
 }
