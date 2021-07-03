@@ -22,17 +22,17 @@ class ProfilesService extends Service {
         $res =
         sqli::query(
             "SELECT 
-                rede_social.nome as redeSocial,
-                perfis.nome as nome,
-                perfis.slug as slug,
-                perfis_cliente.status as status,
-                perfis_cliente.follow as follow,
-                perfis_cliente.data_att as dataAtt
+                    rede_social.nome as redeSocial,
+                    perfis.nome as nome,
+                    perfis.slug as slug,
+                    perfis_cliente.status as status,
+                    perfis_cliente.follow as follow,
+                    perfis_cliente.data_att as dataAtt
 
-            FROM perfis_cliente
-            JOIN perfis ON perfis_cliente.perfil_id = perfis.id
-            JOIN rede_social ON rede_social.id = perfis.rede_social_id
-            JOIN clientes ON clientes.id = perfis_cliente.cliente_id
+            FROM    perfis_cliente
+            JOIN    perfis ON perfis_cliente.perfil_id = perfis.id
+            JOIN    rede_social ON rede_social.id = perfis.rede_social_id
+            JOIN    clientes ON clientes.id = perfis_cliente.cliente_id
                 
             WHERE   (perfis_cliente.status = 1 OR perfis_cliente.status = 2)
                 AND perfis.status = 1

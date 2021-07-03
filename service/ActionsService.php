@@ -21,13 +21,13 @@ class ActionsService extends Service {
 
         $res = sqli::query(
             "SELECT
-                actions.slug as slug
+                    actions.slug as slug
             
-            FROM actions 
-            JOIN actions_cliente ON actions.id = actions_cliente.action_id
-            JOIN clientes        ON actions_cliente.cliente_id = clientes.id 
+            FROM    actions 
+            JOIN    actions_cliente ON actions.id = actions_cliente.action_id
+            JOIN    clientes        ON actions_cliente.cliente_id = clientes.id 
         
-            WHERE clientes.slug = '$slug'  
+            WHERE   clientes.slug = '$slug'  
             ");
         
         $str = "(";
@@ -39,14 +39,14 @@ class ActionsService extends Service {
         
         $res2 = sqli::query(
             "SELECT 
-                map_actions_day.count,
-                actions.slug
+                    map_actions_day.count,
+                    actions.slug
 
-            FROM map_actions_day 
-            JOIN clientes ON map_actions_day.cliente_id = clientes.id 
-            JOIN actions  ON map_actions_day.action_id  = actions.id 
+            FROM    map_actions_day 
+            JOIN    clientes ON map_actions_day.cliente_id = clientes.id 
+            JOIN    actions  ON map_actions_day.action_id  = actions.id 
             
-            WHERE clientes.slug = '$slug' AND data = '$hoje' AND $str
+            WHERE   clientes.slug = '$slug' AND data = '$hoje' AND $str
             ");
 
         $actionsDay = $res2->fetchAllAssoc();

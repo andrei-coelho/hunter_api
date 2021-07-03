@@ -10,15 +10,15 @@ class MachineClient extends DataClient implements Client {
         if(($slugClient = isset($data['HUNTER-SLUG-CLIENT']) ? $data['HUNTER-SLUG-CLIENT'] : false)){
             $res = sqli::query(
                 "SELECT 
-                machine.id as machine_id,
-                machine.chave as machine_chave,
-                machine.slug as machine_slug,
-                cliente.*
+                        machine.id as machine_id,
+                        machine.chave as machine_chave,
+                        machine.slug as machine_slug,
+                        cliente.*
 
-                FROM machine 
-                JOIN cliente ON machine.id = cliente.machine
+                FROM    machine 
+                JOIN    cliente ON machine.id = cliente.machine
                 
-                WHERE machine.chave = '$chave' 
+                WHERE   machine.chave = '$chave' 
                     AND cliente.slug = '$slugClient' 
             ");
         } else {
