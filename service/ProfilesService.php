@@ -19,8 +19,9 @@ class ProfilesService extends Service {
         $id = $this->client->getData()['machine_id'];
         $slug = $vars['clientSlug'];
 
-        $res =
-        sqli::query(
+    
+        if($res =
+            sqli::query(
             "SELECT 
                     rede_social.nome as redeSocial,
                     perfis.nome as nome,
@@ -40,17 +41,44 @@ class ProfilesService extends Service {
                 AND clientes.slug = '$slug'
             
             ORDER BY perfis_cliente.id ASC;
-            ");
-        
-        $values = $res->fetchAllAssoc();
-
-        if($res){
-            $this->response = new Response($values);
+        ")){
+            $this->response = new Response($res->fetchAllAssoc());
             return;
         }
             
         Response::error();
 
+    }
+
+    public function getPerfisAncoras(){
+
+        $vars = vars::get();
+        if(!$vars || !isset($vars['clientSlug']) || !($slug = $vars['clientSlug'])) Response::error();
+
+        if($res =
+            sqli::query(
+            "SELECT 
+                    rede_social.nome as redeSocial,
+                    perfis.nome as nome,
+                    perfis.slug as slug
+
+            FROM    perfis_ancoras
+            JOIN    perfis ON perfis_ancoras.perfil_id = perfis.id
+            JOIN    rede_social ON rede_social.id = perfis.rede_social_id
+            JOIN    clientes ON clientes.id = perfis_ancoras.cliente_id
+                
+            WHERE   
+                    perfis.status = 1
+                AND clientes.status = 1
+                AND clientes.slug = '$slug'
+            
+            ORDER BY perfis_ancoras.id ASC;
+        ")){
+            $this->response = new Response($res->fetchAllAssoc());
+            return;
+        }
+        
+        Response::error();
     }
 
 }

@@ -28,7 +28,7 @@ class ClienteService extends Service {
                 " WHERE clientes.slug = '$slug' AND machine.id = $machineId AND clientes.status = 1" :
                 " WHERE machine.id = $machineId AND clientes.status = 1";
 
-        $res = sqli::query($query);
+        $res    = sqli::query($query);
 
         if($res){
             $this->response = new Response($res->fetchAllAssoc());
