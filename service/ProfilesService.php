@@ -50,6 +50,7 @@ class ProfilesService extends Service {
 
     }
 
+    
     public function getPerfisAncoras(){
 
         $vars = vars::get();
@@ -79,6 +80,68 @@ class ProfilesService extends Service {
         }
         
         Response::error();
+    }
+
+
+    public function saveNewProfiles(){
+
+        $vars = vars::get();
+        
+        if(!$vars 
+            || !isset($vars['clientSlug']) 
+            || !isset($vars['profiles'])
+            || !isset($vars['socialMedia'])
+        ) Response::error();
+
+        $smid = $vars['socialMedia'];
+        $cliS = $vars['clientSlug'];
+        $newP = $vars['profiles'];
+
+        $res1 = sqli::query("SELECT id FROM rede_social WHERE nome = '$smid'");
+        if(!$res1) Response::error(500);
+
+        $res2 = sqli::query("SELECT id FROM clientes WHERE slug = '$cliS'");
+        if(!$res2) Response::error(500);
+
+        $ids = $res1->fetchAssoc()['id'];
+        $idc = $res2->fetchAssoc()['id'];
+
+        $errors = 0;
+        $succes = 0;
+
+        foreach ($newP as $key => $value) {
+            $this->try_insert_profile($ids, $idc, $value['nome'], $value['slug']) ?
+            $succes++ :
+            $errors++ ;
+        }
+
+        $this->response = new Response(["success" => $succes, "errors" => $errors]);
+        
+    }
+
+
+    private function try_insert_profile($smid, $idc, $nome, $slug){
+
+        $slug = str_replace("@", "", $slug);
+        $chck = sqli::query("SELECT id FROM perfis WHERE slug = '$slug' AND rede_social_id = $smid");
+
+        if($chck->rowCount() == 0){
+            $profileId = sqli::exec(
+                "INSERT INTO perfis(nome, slug, rede_social_id, data_att, `status`)
+                 VALUES ('$nome', '$slug', $smid, now(), 1)", 
+            true);
+        } else {
+            $profileId = $chck->fetchAssoc()['id'];
+        }
+
+        if(!$profileId) return false;
+
+        return sqli::exec(
+            "INSERT INTO 
+            perfis_cliente (cliente_id, perfil_id, `status`, data_att)
+            VALUES         ($idc, $profileId, 1, now())"
+        );
+
     }
 
 }
