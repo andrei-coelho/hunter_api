@@ -47,18 +47,18 @@ class ActionsService extends Service {
     }
 
 
-    public function saveAction(){
+    public function follow(){
 
         $vars = vars::get();
         if( !$vars || 
             !isset($vars['clientSlug']) || 
             !isset($vars['account_id']) ||
-            !isset($vars['action_name'])
+            !isset($vars['profileSlug']) 
         ) Response::error();
 
         $account_id  = (int)$vars['account_id'];
-        $action_name = $vars['action_name'];
         $clientSlug  = $vars['clientSlug'];
+        $profileSlug  = $vars['profileSlug'];
         $machine_id  = $this->client->getData()['machine_id'];
 
         $check = sqli::query(
@@ -73,9 +73,10 @@ class ActionsService extends Service {
             JOIN  rede_social ON perfis.rede_social_id = rede_social.id
             
             WHERE 
-                      clientes.machine_id = $machine_id 
-                  AND contas_rede_social.id = $account_id 
-                  AND clientes.slug = '$clientSlug'
+                    clientes.machine_id = $machine_id 
+                AND contas_rede_social.id = $account_id 
+                AND clientes.slug = '$clientSlug'
+                AND clientes.status = 1
         ");
 
         if($check -> rowCount() == 0){
@@ -84,6 +85,50 @@ class ActionsService extends Service {
         }
 
         $rede_social = $check->fetchAssoc()['rede_social_id'];
+
+        // salva ação de seguir em um determinado usuário 
+
+        $selProfile = sqli::query(
+            "SELECT  perfis_cliente.id,
+                     perfis_cliente.status 
+               
+               FROM  perfis_cliente 
+               JOIN  perfis ON perfis_cliente.perfil_id = perfis.id
+               JOIN  clientes ON clientes.id = perfis_cliente.cliente_id
+               
+               WHERE clientes.slug = '$clientSlug' 
+                 AND clientes.status = 1
+                 AND perfis.slug = '$profileSlug'
+                 AND perfis.rede_social_id = $rede_social;"
+        );
+
+        if(!$selProfile || $selProfile -> rowCount() == 0){
+            Response::error(404, "O perfil que você está tentando seguir não está registrado no banco de dados");
+            return;
+        }
+
+        $profile = $selProfile->fetchAssoc();
+
+        if($profile['status'] != 1){
+            Response::error(403, "Não é possível seguir esse perfil! O perfil que você está tentando seguir já tem seu status modificado");
+            return;
+        }
+
+        $profileId = $profile['id'];
+
+        if(!sqli::exec("UPDATE perfis_cliente SET `status` = 2 WHERE id = $profileId")){
+            Response::error(500, "Ocorreu um erro ao tentar atualizar");
+            return;
+        }
+
+        //$this->response = new Response([$profile]);
+
+        $this->register_map_action($rede_social, $account_id, $clientSlug, "follow");
+    
+    }
+
+
+    private function register_map_action(int $rede_social, int $account_id, $clientSlug, $action_name){
         
         $actionsClient = sqli::query(
             "SELECT 
@@ -157,10 +202,13 @@ class ActionsService extends Service {
             ('$hoje', $actionId, $account_id, 1)
         ")){
             Response::error(500, "Ocorreu um erro ao tentar atualizar");
+            return;
         }
 
 
     }
 
+
+    
 }
         

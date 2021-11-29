@@ -7,9 +7,12 @@ use src\Vars as vars;
 
 use src\sqli\SQLi as sqli;
 
+
 class ProfilesService extends Service { 
 
+   
     protected $access = ["MachineClient"];
+
 
     public function get(){
         
@@ -36,9 +39,9 @@ class ProfilesService extends Service {
             JOIN    clientes ON clientes.id = perfis_cliente.cliente_id
                 
             WHERE   (perfis_cliente.status = 1 OR perfis_cliente.status = 2)
-                AND perfis.status = 1
-                AND clientes.status = 1
-                AND clientes.slug = '$slug'
+              AND   perfis.status = 1
+              AND   clientes.status = 1
+              AND   clientes.slug = '$slug'
             
             ORDER BY perfis_cliente.id ASC;
         ")){
@@ -106,16 +109,28 @@ class ProfilesService extends Service {
         $ids = $res1->fetchAssoc()['id'];
         $idc = $res2->fetchAssoc()['id'];
 
-        $errors = 0;
-        $succes = 0;
+        $errors   = 0;
+        $success  = 0;
+        $repetido = 0;
 
         foreach ($newP as $key => $value) {
-            $this->try_insert_profile($ids, $idc, $value['nome'], $value['slug']) ?
-            $succes++ :
+            
+            $resp = $this->try_insert_profile($ids, $idc, $value['nome'], $value['slug']);
+            
+            if(is_array($resp)){
+                if(!$resp[0] && $resp[1] == "repetido") $repetido++;
+                else if(!$resp[0] && $resp[1] == "erro") $errors++;
+                else if($resp[0]) $success++;
+                continue;
+            }
+
+            $resp === true ?
+            $success++ :
             $errors++ ;
+            
         }
 
-        $this->response = new Response(["success" => $succes, "errors" => $errors]);
+        $this->response = new Response(["success" => $success, "errors" => $errors, "repetidos" => $repetido]);
         
     }
 
@@ -134,7 +149,9 @@ class ProfilesService extends Service {
             $profileId = $chck->fetchAssoc()['id'];
         }
 
-        if(!$profileId) return false;
+        if(!$profileId) return [false, 'erro'];
+
+        if(sqli::query("SELECT id FROM perfis_cliente WHERE cliente_id = $idc AND perfil_id = $profileId")->rowCount() > 0) return [false, 'repetido'];
 
         return sqli::exec(
             "INSERT INTO 
@@ -143,5 +160,6 @@ class ProfilesService extends Service {
         );
 
     }
+
 
 }
