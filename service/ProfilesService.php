@@ -43,7 +43,7 @@ class ProfilesService extends Service {
               AND   clientes.status = 1
               AND   clientes.slug = '$slug'
             
-            ORDER BY perfis_cliente.id ASC;
+            ORDER BY perfis_cliente.id DESC;
         ")){
             $this->response = new Response($res->fetchAllAssoc());
             return;

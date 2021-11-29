@@ -54,7 +54,7 @@ class ActionsService extends Service {
             !isset($vars['clientSlug']) || 
             !isset($vars['account_id']) ||
             !isset($vars['profileSlug']) 
-        ) Response::error();
+        ) Response::error(404, "Estão faltando elementos...");
 
         $account_id  = (int)$vars['account_id'];
         $clientSlug  = $vars['clientSlug'];
@@ -120,8 +120,6 @@ class ActionsService extends Service {
             Response::error(500, "Ocorreu um erro ao tentar atualizar");
             return;
         }
-
-        //$this->response = new Response([$profile]);
 
         $this->register_map_action($rede_social, $account_id, $clientSlug, "follow");
     
